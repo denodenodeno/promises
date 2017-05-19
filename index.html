@@ -1,0 +1,500 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <title>Async In JavaScript</title>
+
+    <meta name="description" content="this keyword in JavaScript">
+    <meta name="author" content="Denislav Ganchev">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,300,700,400italic,300italic' rel='stylesheet'
+          type='text/css'>
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+
+    <div class="slides">
+        <section>
+            <img src="assets/images/promises.svg" alt="Promises logo" style="width: 120px; border: none;">
+            <h2><span class="color__yellow">Promises</span></h2>
+        </section>
+
+        <section>
+            <h2 class="uppercase color__yellow">Agenda</h2>
+            <section>
+                <ul>
+                    <li class="fragment font__light">
+                        Promises definition
+                    </li>
+                    <li class="fragment font__light">
+                        How to use promises
+                    </li>
+                    <li class="fragment font__light">
+                        Promises States and Fates
+                    </li>
+                    <li class="fragment font__light">
+                        The Promise API
+                    </li>
+                    <li class="fragment font__light">
+                        Some common mistakes when using Promises
+                    </li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <h2 class="uppercase color__yellow"><span style="color: #F0DB4F">Promises</span></h2>
+
+            <section>
+                <h4 class="color__blue">Definition</h4>
+                <ul class="font__light">
+                    <li>The Promise object is used for asynchronous computations</li>
+                    <li>A Promise is an object that serves as a placeholder for a value</li>
+                </ul>
+            </section>
+
+            <section>
+                <h4 class="color__blue">Syntax</h4>
+                <ul class="font__light">
+                    <li>the anonymous function is called <span class="font__medium">executor</span></li>
+                </ul>
+                <pre class="javascript">
+                    <code data-trim data-no-escape>
+                        new Promise( function (resolve, reject) { ... } );
+                    </code>
+                </pre>
+            </section>
+
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Basic usage</h2>
+
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    function asyncFunc() {
+                        return new Promise((resolve, reject) => {
+                            //make API call
+                            resolve(result);
+                            //or
+                            reject(error);
+                        });
+                    }
+
+                    //usage
+                    asyncFunc()
+                        .then(
+                            result => {//handle success},
+                            err => {//handle error}
+                        );
+
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Promises States and Fates - How Promises works</h2>
+
+            <section>
+                <h4 class="color__blue">Promises States</h4>
+                <ul>
+                    <li><span class="color__blue">Fulfilled</span> - A promise "p" is fulfilled if p.then(f, r) will call f "as soon as possible."</li>
+                    <li><span class="color__blue">Rejected</span> - A promise "p" is rejected if p.then(f, r) will call r "as soon as possible."</li>
+                    <li><span class="color__blue">Pending</span>- A promise is pending if it is neither fulfilled nor rejected.</li>
+                    <li>Settled Promise</li>
+                </ul>
+            </section>
+
+            <section>
+                <h4 class="color__blue">Promises Fates</h4>
+                <ul class="font__light">
+                    <li><span class="color__blue">Resolved</span></li>
+                    <li>A promise is <span class="color__blue">unresolved</span></li>
+                </ul>
+            </section>
+
+            <section>
+                <h4>States and Fates</h4>
+                <ul class="font__light">
+                    <li>
+                        <span class="color__blue">Fulfilled</span>,
+                        if it has been resolved to a non-promise value,
+                        or resolved to a thenable which will call any passed fulfillment handler
+                        back as soon as possible, or resolved to another promise that is fulfilled.
+                    </li>
+                    <li>
+                        <span class="color__blue">Rejected</span>,
+                        if it has been rejected directly,
+                        or resolved to a thenable which will call any passed rejection handler
+                        back as soon as possible, or resolved to another promise that is rejected.
+                    </li>
+                    <li>
+                        <span class="color__blue">Pending</span>,
+                        if it has been resolved to a thenable which will call neither handler
+                        back as soon as possible, or resolved to another promise that is pending.
+                    </li>
+                </ul>
+            </section>
+
+        </section>
+
+
+        <!--Promise API-->
+        <section>
+            <h2 class="font__medium color__yellow">Promise API</h2>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Promise.prototype.then()</h2>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    p.then(onFulfilled[, onRejected]);
+
+                    p.then(value => {
+                          // fulfillment
+                        }, reason => {
+                          // rejection
+                        }
+                    );
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Promise.prototype.catch()</h2>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    p.catch(onRejected);
+
+                    p.catch(reason => {
+                       // rejection
+                    });
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Promise.resolve()</h2>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    Promise.resolve(value);
+                    Promise.resolve(promise);
+                    Promise.resolve(thenable);
+
+                    var p = Promise.resolve([1,2,3]);
+                    p.then(v => console.log(v));// [1, 2, 3]
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Promise.reject()</h2>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    Promise.reject(reason);
+
+                    Promise.reject(new Error('error'))
+                        .then(error => {
+                          // not called
+                        }, error => {
+                          console.log(error);
+                        });
+
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Promise.all()</h2>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    Promise.all(iterable);
+
+                    var p1 = Promise.resolve(3);
+                    var p2 = 1337;
+                    var p3 = new Promise((resolve, reject) => {
+                      setTimeout(resolve, 100, 'foo');
+                    });
+
+                    Promise.all([p1, p2, p3])
+                        .then(values => {
+                          console.log(values); // [3, 1337, 'foo']
+                        });
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Promise.race()</h2>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    Promise.race(iterable);
+
+                    var p1 = new Promise(function(resolve, reject) {
+                        setTimeout(resolve, 500, 'one');
+                    });
+                    var p2 = new Promise(function(resolve, reject) {
+                        setTimeout(resolve, 100, 'two');
+                    });
+
+                    Promise.race([p1, p2]).then(function(value) {
+                      console.log(value); // "two"
+                      // Both resolve, but p2 is faster
+                    });
+
+                </code>
+            </pre>
+        </section>
+        <!--:Promise API-->
+
+        <section>
+            <h2 class="font__medium color__yellow">Promise Chaining</h2>
+
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                    fetch(someUrl)
+                      .then(processTheResponse)
+                      .then(save)
+                      .catch(handleErrors);
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h2 class="color__yellow">Error Handling</h2>
+
+            <section>
+                <pre class="javascript">
+                    <code data-trim data-no-escape>
+                        async()
+                            .then(
+                              handleSuccess,
+                              handleError
+                            );
+                    </code>
+                </pre>
+            </section>
+
+            <section>
+                <pre class="javascript">
+                    <code data-trim data-no-escape>
+                        async()
+                            .then(handleSuccess)
+                            .catch(handleError);
+                    </code>
+                </pre>
+            </section>
+
+            <section>
+                <pre class="javascript">
+                    <code data-trim data-no-escape>
+                       async()
+                          .then(
+                            handleSuccess,
+                            handleError
+                          )
+                          .then(...)
+                          .then(...)
+                          .then(...)
+                          .catch(handleGeneralError);
+                    </code>
+                </pre>
+            </section>
+
+        </section>
+
+        <section>
+            <h2 class="color__yellow">Cancel a promise</h2>
+        </section>
+
+        <section>
+            <h2 class="font__medium color__yellow">Advantages over callbacks</h2>
+
+            <ul class="font__light">
+                <li>No inversion of control</li>
+                <li>Chaining is simpler</li>
+                <li>
+                    Composing asynchronous calls (loops, mapping, etc.): is a little easier, because you have data (Promise objects) you can work with.
+                </li>
+                <li>
+                    Error handling
+                </li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h2 class="color__yellow">Some tips and tricks when using Promises</h2>
+            <!--todo add slides-->
+        </section>
+
+        <section>
+            <h4 class="color__blue">Promises chain. They are composable</h4>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                   //don't do this
+                    iReturnAPromise()
+                        .then(() => {
+                            return new Promise((resolve, reject) => {
+                                resolve(iReturnAPromiseToo());
+                            });
+                        });
+
+                    //do this
+                    iReturnAPromise()
+                        .then(() => {
+                                var data = iAmSynchronous();
+                                return iReturnAPromiseToo(data);
+                            })
+                            .then(result => {
+                                //Do something cool with result of iReturnAPromiseToo.
+                            })
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h4 class="color__blue">Use .catch() for catching errors</h4>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                   getUserAsync()
+                        .then(user => {
+                            return user.name;
+                        })
+                        .catch(function(err) {
+                            console.error(err);
+                        });
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h4 class="color__blue">Don't use deferred objects. It's an anti-pattern.</h4>
+        </section>
+
+        <section>
+            <h4 class="color__blue">Always return from .then()</h4>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                   iReturnAPromise()
+                        .then(() => {
+                                anotherPromise();
+                            })
+                            .then(result => {
+                                //result is undefined
+                            })
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h4 class="color__blue">Promise fall-through</h4>
+            <pre class="javascript">
+                <code data-trim data-no-escape>
+                   Promise.resolve('one')
+                        .then(Promise.resolve('two'))
+                        .then(result => console.log(result));
+                </code>
+            </pre>
+
+            <pre class="javascript fragment">
+                <code data-trim data-no-escape>
+                   Promise.resolve('one')
+                        .then(null)
+                        .then(result => console.log(result));
+                </code>
+            </pre>
+
+            <pre class="javascript fragment">
+                <code data-trim data-no-escape>
+                   Promise.resolve('one')
+                        .then(() => Promise.resolve('two'))
+                        .then(result => console.log(result));
+                </code>
+            </pre>
+
+        </section>
+
+        <section>
+            <h2 class="color__yellow">Promises libraries</h2>
+            <ul class="font__light">
+                <li>
+                    <a href="https://github.com/petkaantonov/bluebird">Bluebird</a>
+                </li>
+                <li>
+                    <a href="https://github.com/kriskowal/q">Q</a>
+                </li>
+                <li>
+                    <a href="https://github.com/cujojs/when">when.js</a>
+                </li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        width: 1200,
+        height: 800,
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+        // Optional reveal.js plugins
+        dependencies: [
+            {
+                src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            }
+            },
+            {
+                src: 'plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/highlight/highlight.js', async: true, condition: function () {
+                return !!document.querySelector('pre code');
+            }, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            },
+            {src: 'plugin/zoom-js/zoom.js', async: true},
+            {src: 'plugin/notes/notes.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>
